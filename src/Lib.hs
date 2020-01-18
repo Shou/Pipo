@@ -1,11 +1,3 @@
-{-# LANGUAGE BlockArguments,
-             LambdaCase,
-             RecordWildCards,
-             DeriveGeneric,
-             DeriveAnyClass,
-             OverloadedStrings
-#-}
-
 module Lib where
 
 
@@ -24,10 +16,12 @@ import GHC.Generics (Generic)
 import System.IO as IO
 import System.Random as Random
 
+import Parser
+
 
 data Config
   = Config
-      { discordSecret :: Text
+      { discordToken :: Text
       }
   deriving (Show, Generic, Aeson.FromJSON)
 
@@ -43,7 +37,7 @@ handleDiscordEvent = flip $ \case
 handleDiscordMessage :: Discord.Message -> Discord.DiscordHandle -> IO ()
 handleDiscordMessage (Discord.Message {..}) handle = do
   when ("Tombot" `Text.isPrefixOf` messageText) do
-    e <- Discord.restCall handle <<< Discord.CreateMessage messageChannel =<< babby
+    e <- Discord.restCall handle . Discord.CreateMessage messageChannel =<< babby
     print e
 
   where
@@ -69,7 +63,7 @@ someFunc = do
 
   where
     opts (Config {..}) = Discord.def
-      { Discord.discordToken = "Bot " <> discordSecret
+      { Discord.discordToken = "Bot " <> discordToken
       , Discord.discordOnEvent = handleDiscordEvent
       , Discord.discordOnLog = \text -> putStr "Log " >> print text
       }
