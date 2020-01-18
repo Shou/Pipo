@@ -1,7 +1,7 @@
 name:                Pipo
 version:             0.1.0.0
 github:              "Shou/Pipo"
-license:             BSD3
+license:             GPL3
 author:              "Shou"
 maintainer:          "x+gh@shou.io"
 copyright:           "2020 Shou"
